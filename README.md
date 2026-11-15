@@ -1,6 +1,6 @@
 # Crescent: Lunar Landing Site Navigator
 
-NASA Space Apps Challenge 2026. Challenge: **Lunar Landing Site Navigator**. Team **Crescent Dev** (Astana, Kazakhstan).
+NASA Space Apps Challenge 2026. Challenge: **Lunar Landing Site Navigator**. Team **Crescent Dev** (Universal Event, Kazakhstan). Members: Harun Kalmakhanuly, Alizhan Audanbekov, Nurali Dauletbaev, Bexultanov Nurali, Nurmagambet Arnur, fakyoglu.
 
 Crescent is a browser tool for comparing landing sites and dates at the lunar south pole. For each site it shows when the Sun is above the real terrain horizon (power) and when Earth is visible (direct-to-Earth communication).
 
