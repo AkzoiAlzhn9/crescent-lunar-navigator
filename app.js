@@ -519,6 +519,7 @@ async function main() {
   renderSiteInfo();
   setWindow();
   $('#loading').classList.add('done');
+  window.__crescent = { state, setTime, select, setWindow, findWindows, addCustom };
   const hv = location.hash.slice(1);
   if (['terrain', 'learn'].includes(hv)) document.querySelector(`.tab[data-view="${hv}"]`).click();
 }
