@@ -1,0 +1,26 @@
+{
+ "near": {
+  "n": 1400,
+  "scale": 300.0,
+  "half": 210000.0
+ },
+ "far": {
+  "n": 953,
+  "scale": 960.0,
+  "half": 457440.0
+ },
+ "R": 1737400.0,
+ "ephem": {
+  "start": "2026-01-01T00:00:00Z",
+  "stepHours": 1,
+  "count": 43825,
+  "fields": [
+   "earthSubLon",
+   "earthSubLat",
+   "sunSubLon",
+   "sunSubLat",
+   "earthDistKm"
+  ],
+  "source": "JPL Horizons (DE441), target Moon 301, observer geocenter, frame MOON_ME"
+ }
+}

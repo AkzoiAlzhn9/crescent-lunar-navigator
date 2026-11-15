@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crescent — Lunar Landing Site Navigator</title>
+<meta name="description" content="Compare lunar south pole landing sites and dates: Sun and Earth above the real LOLA terrain horizon, power and direct-to-Earth communication windows.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3a13 13 0 0 1 0 26a9 13 0 0 0 0-26z" fill="currentColor"/></svg>
+    <div>
+      <h1>Crescent</h1>
+      <p>Lunar Landing Site Navigator · south pole</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="plan" role="tab">Planner</button>
+    <button class="tab" data-view="terrain" role="tab">3D terrain</button>
+    <button class="tab" data-view="learn" role="tab">How it works</button>
+  </nav>
+</header>
+
+<div id="loading" class="loading">Loading NASA LOLA terrain &amp; JPL Horizons ephemeris…</div>
+
+<main id="view-plan" class="view">
+  <section class="panel map-panel">
+    <div class="panel-head">
+      <h2>South pole map</h2>
+      <span class="hint">Scroll to zoom · drag to pan · click to drop a custom site</span>
+    </div>
+    <div class="map-wrap"><canvas id="map"></canvas>
+      <div class="map-legend"><span class="lg lg-site"></span>candidate site <span class="lg lg-sel"></span>selected <span class="lg lg-sun"></span>Sun direction</div>
+    </div>
+    <div class="site-info" id="siteInfo"></div>
+  </section>
+
+  <section class="panel ctrl-panel">
+    <div class="controls">
+      <label>Window start <input type="date" id="startDate" min="2026-01-01" max="2030-12-01"></label>
+      <label>Length
+        <select id="duration">
+          <option value="720">1 lunar day (30 d)</option>
+          <option value="2160">3 months</option>
+          <option value="8760">1 year</option>
+        </select>
+      </label>
+      <label>Earth mask <select id="commMask"><option value="0">0° (horizon)</option><option value="1" selected>1°</option><option value="2">2°</option><option value="5">5°</option></select></label>
+    </div>
+    <div class="clock">
+      <button id="play" class="btn icon" aria-label="Play">▶</button>
+      <input type="range" id="time" min="0" max="720" step="1" value="0">
+      <output id="timeLabel"></output>
+    </div>
+    <div class="now" id="nowCards"></div>
+
+    <div class="panel-head"><h2>Horizon panorama</h2><span class="hint" id="panoHint">LOLA terrain silhouette with Sun &amp; Earth tracks for the window</span></div>
+    <canvas id="pano"></canvas>
+
+    <div class="panel-head"><h2>Timeline — all sites</h2><span class="hint"><span class="sw sw-sun"></span>sunlit <span class="sw sw-earth"></span>Earth in view <span class="sw sw-both"></span>both (power + comms)</span></div>
+    <canvas id="timeline"></canvas>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="panel-head"><h2>Compare &amp; rank</h2>
+      <button class="btn" id="csv">Export CSV</button>
+    </div>
+    <div class="weights">
+      <label>Power <input type="range" id="wSun" min="0" max="10" value="5"></label>
+      <label>Comms <input type="range" id="wEarth" min="0" max="10" value="4"></label>
+      <label>Avoid long nights <input type="range" id="wNight" min="0" max="10" value="3"></label>
+    </div>
+    <table id="rank"><thead><tr><th>#</th><th>Site</th><th>Sunlit</th><th>Earth</th><th>Both</th><th>Longest night</th><th>Longest comm gap</th><th>Score</th></tr></thead><tbody></tbody></table>
+
+    <div class="panel-head finder-head"><h2>Mission window finder</h2><span class="hint">for the selected site, across the analysis window</span></div>
+    <div class="controls">
+      <label>Surface stay <select id="stay"><option value="72">3 days</option><option value="156" selected>6.5 days</option><option value="336">14 days</option></select></label>
+      <label>Need sunlight ≥ <select id="minSun"><option value="0.9">90%</option><option value="0.95" selected>95%</option><option value="1">100%</option></select></label>
+      <button class="btn primary" id="find">Find windows</button>
+    </div>
+    <ol id="windows" class="windows"></ol>
+  </section>
+</main>
+
+<main id="view-terrain" class="view hidden">
+  <section class="panel terrain-panel">
+    <div class="panel-head"><h2>3D terrain around <span id="t3name"></span></h2><span class="hint">LOLA 300 m terrain lit by the real Sun position at the selected time · drag to orbit</span></div>
+    <div id="three" class="three"></div>
+    <div class="clock">
+      <button id="play3" class="btn icon" aria-label="Play">▶</button>
+      <input type="range" id="time3" min="0" max="720" step="1" value="0">
+      <output id="timeLabel3"></output>
+    </div>
+  </section>
+</main>
+
+<main id="view-learn" class="view hidden">
+  <article class="panel learn">
+    <h2>Why the lunar south pole is hard</h2>
+    <p>At the pole the Sun never rises more than about 1.6° above the ideal horizon, so it skims around the sky once every 29.5 days. A ridge a few kilometres away can hide it for days. Earth hangs low too, wobbling up and down by about ±7° through libration, so whether a lander can talk straight to Earth depends on the exact spot and date.</p>
+    <h2>What Crescent does</h2>
+    <ol>
+      <li><b>Real terrain.</b> We cast 720 rays from each site across the NASA LRO <abbr title="Lunar Orbiter Laser Altimeter">LOLA</abbr> polar elevation model (120 m) out to 440 km, accounting for the Moon's curvature, to get the true horizon in every direction.</li>
+      <li><b>Real sky.</b> Hourly sub-solar and sub-Earth points on the Moon (2026–2030) come from NASA JPL Horizons (DE441, MOON_ME frame, the same frame as LOLA). We correct for parallax, since the site sits 1,737 km from the Moon's centre.</li>
+      <li><b>Power &amp; comms.</b> Sunlight = the fraction of the solar disk above the terrain. Direct-to-Earth = Earth's centre above the terrain plus your antenna mask.</li>
+      <li><b>Decisions.</b> Compare sites, weight what matters to your mission, and find the dates when a stay of a given length gets continuous sunlight and the longest Earth contact.</li>
+    </ol>
+    <h2>Checks</h2>
+    <p>Our 2027 results reproduce published patterns: the Shackleton–de Gerlache connecting ridge is sunlit about 86% of the year, while Malapert Massif and Mons Mouton trade some sunlight for Earth in view 80–86% of the time.</p>
+    <h2>Limits</h2>
+    <p>Featured sites are representative high points near NASA's Artemis III candidate regions, not official landing coordinates. Terrain resolution (120 m for featured sites, 300 m for custom sites) cannot show boulders or small local slopes. This is an educational and early-planning tool, not flight software.</p>
+    <h2>Data</h2>
+    <ul>
+      <li>NASA LRO LOLA LDEM_75S_120M, PDS Geosciences Node</li>
+      <li>NASA JPL Horizons ephemeris system (DE441)</li>
+      <li>Candidate region names: NASA Artemis III announcement (Oct 2024)</li>
+    </ul>
+    <p class="muted">Built by team Crescent Dev, Astana, for the NASA Space Apps Challenge 2026 (challenge: Lunar Landing Site Navigator). AI disclosure: the code and documentation were written with help from an AI coding assistant (Anthropic Claude). The team directed the work. All terrain and sky data come from NASA sources, and every number on this page is computed from that data, not generated by AI.</p>
+    <p class="muted"><a href="slides.html" style="color:var(--accent)">Project presentation (7 slides)</a></p>
+  </article>
+</main>
+
+<div id="tip" class="tip"></div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

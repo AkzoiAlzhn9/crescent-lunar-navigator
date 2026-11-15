@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crescent — Project Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070a12;--text:#e6ebf5;--muted:#8b97b0;--sun:#ffc94a;--earth:#4aa8ff;--both:#3ddc97;--accent:#9b8cff;--line:#1f2a42}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;overflow:hidden}
+.deck{height:100%;display:grid;place-items:center}
+.slide{display:none;width:min(100vw,177.78vh);aspect-ratio:16/9;padding:4.5% 6%;position:relative;
+  background:radial-gradient(70% 70% at 85% 0%,#1d1747 0,transparent 60%),radial-gradient(60% 60% at 0% 100%,#0b2a3c 0,transparent 60%),#070a12;font-size:min(1.9vw,3.4vh)}
+.slide.on{display:flex;flex-direction:column}
+h1{font-size:3.4em;margin:0;line-height:1.05}h2{font-size:1.6em;margin:0 0 .5em;color:var(--sun)}
+p,li{font-size:.95em;line-height:1.45;color:#cdd5e6}.muted{color:var(--muted)}
+.kicker{font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:.8em;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.6em;align-items:center;flex:1;min-height:0}
+.shot{width:100%;max-height:30em;object-fit:contain;object-position:top;border-radius:.6em;border:1px solid var(--line);box-shadow:0 1em 3em rgba(0,0,0,.5)}
+.big{font-size:2.4em;font-weight:700}.stat{border:1px solid var(--line);border-radius:.6em;padding:.7em .9em;background:rgba(255,255,255,.02)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8em;margin-top:.6em}
+table{border-collapse:collapse;width:100%;font-size:.9em}td,th{padding:.35em .5em;border-bottom:1px solid var(--line);text-align:right}td:first-child,th:first-child{text-align:left}th{color:var(--muted);font-weight:500}
+.bar{display:inline-block;height:.5em;border-radius:.25em;vertical-align:middle;margin-left:.4em}
+.foot{position:absolute;left:6%;right:6%;bottom:3.5%;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:.6em;color:var(--muted)}
+.moon{position:absolute;right:7%;top:16%;width:30%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 70% 40%,#d9d4cc 0,#8d8a86 45%,#2b2a2e 70%,transparent 71%);box-shadow:inset -3em -1em 4em #000;opacity:.9}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:2em;padding:.2em .8em;margin:.2em .3em 0 0;font-size:.8em}
+.nav{position:fixed;top:12px;right:16px;display:flex;gap:8px;z-index:3}.nav button{background:#131b2d;color:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide">
+  <div class="kicker">NASA Space Apps Challenge 2026 · Lunar Landing Site Navigator</div>
+  <h1>Crescent</h1>
+  <p style="font-size:1.5em;max-width:55%;margin-top:.5em">Pick a south-pole landing site and date in seconds. See where the Sun gives power and where Earth stays in view.</p>
+  <p class="muted" style="margin-top:auto">Team Crescent Dev · Astana, Kazakhstan</p>
+  <div class="moon"></div>
+  <div class="foot"><span>1 / 7</span><span>Data: NASA LRO LOLA · NASA JPL Horizons</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">The problem</div>
+  <h2>At the lunar south pole, a few kilometres decide everything</h2>
+  <div class="grid2">
+    <ul>
+      <li>The Sun never climbs more than <b>~1.6°</b> above the ideal horizon. It just skims around the sky.</li>
+      <li>Earth sits low and wobbles by <b>±7°</b> through libration, so direct-to-Earth radio comes and goes.</li>
+      <li>Nearby ridges and craters hide both for days at a time.</li>
+      <li>Tools that compute this exist, but they are made for specialists. Planners, teachers and the public can't compare options quickly.</li>
+    </ul>
+    <div class="stats" style="grid-template-columns:1fr">
+      <div class="stat"><div class="big" style="color:var(--sun)">±1.6°</div>Sun elevation range at the pole</div>
+      <div class="stat"><div class="big" style="color:var(--earth)">±7°</div>Earth elevation swing (libration)</div>
+      <div class="stat"><div class="big" style="color:var(--both)">29.5 d</div>one lunar day: one slow lap of the Sun</div>
+    </div>
+  </div>
+  <div class="foot"><span>2 / 7</span><span>Crescent Dev</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Our solution</div>
+  <h2>One screen: map → horizon → timeline → ranking</h2>
+  <div class="grid2" style="grid-template-columns:1.5fr 1fr">
+    <img class="shot" src="assets/planner.png" alt="Crescent planner screen">
+    <ul>
+      <li><b>Map</b> of the south pole from real LOLA terrain. Click anywhere to add a custom site.</li>
+      <li><b>Horizon panorama</b> showing the terrain silhouette with the Sun and Earth paths.</li>
+      <li><b>Timeline</b> comparing every site: <span style="color:var(--sun)">sunlit</span>, <span style="color:var(--earth)">Earth in view</span>, <span style="color:var(--both)">both</span>.</li>
+      <li><b>Ranking</b> with adjustable weights, plus a <b>mission window finder</b> and CSV export.</li>
+    </ul>
+  </div>
+  <div class="foot"><span>3 / 7</span><span>Runs in any browser · no install</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">How it works</div>
+  <h2>Real NASA terrain + real NASA ephemeris</h2>
+  <div class="grid2">
+    <div>
+      <p><b>1 · Terrain horizon.</b> From each site we cast 720 rays across the LRO LOLA 120 m polar elevation model out to 440 km, including the Moon's curvature.</p>
+      <p><b>2 · Sky.</b> Hourly sub-solar and sub-Earth points for 2026–2030 come from JPL Horizons (DE441) in the MOON_ME frame, the same frame as LOLA. We correct for the site's 1,737 km parallax.</p>
+      <p><b>3 · Metrics.</b> Sunlight = fraction of the solar disk above the terrain. Comms = Earth above terrain + antenna mask. We track the longest night and the longest communication gap.</p>
+    </div>
+    <img class="shot" src="assets/terrain.png" alt="3D terrain view">
+  </div>
+  <div class="foot"><span>4 / 7</span><span>Static web app · data preprocessed in Python · JavaScript + three.js</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">What it shows · whole year 2027</div>
+  <h2>Every site is a trade-off between power and comms</h2>
+  <table>
+    <tr><th>Site (near NASA candidate region)</th><th>Sunlit</th><th>Earth in view</th></tr>
+    <tr><td>Connecting Ridge (Shackleton–de Gerlache)</td><td>86.2%<span class="bar" style="width:4.3em;background:var(--sun)"></span></td><td>50.8%<span class="bar" style="width:2.5em;background:var(--earth)"></span></td></tr>
+    <tr><td>Shackleton Rim</td><td>85.6%<span class="bar" style="width:4.3em;background:var(--sun)"></span></td><td>49.6%<span class="bar" style="width:2.5em;background:var(--earth)"></span></td></tr>
+    <tr><td>de Gerlache Rim 2</td><td>81.9%<span class="bar" style="width:4.1em;background:var(--sun)"></span></td><td>54.9%<span class="bar" style="width:2.7em;background:var(--earth)"></span></td></tr>
+    <tr><td>Mons Mouton Plateau</td><td>68.8%<span class="bar" style="width:3.4em;background:var(--sun)"></span></td><td>86.1%<span class="bar" style="width:4.3em;background:var(--earth)"></span></td></tr>
+    <tr><td>Malapert Massif</td><td>67.6%<span class="bar" style="width:3.4em;background:var(--sun)"></span></td><td>79.3%<span class="bar" style="width:4em;background:var(--earth)"></span></td></tr>
+    <tr><td>Haworth (rim area)</td><td>51.1%<span class="bar" style="width:2.6em;background:var(--sun)"></span></td><td>59.7%<span class="bar" style="width:3em;background:var(--earth)"></span></td></tr>
+  </table>
+  <p class="muted" style="margin-top:.6em">Sites near the pole get the most sunlight. Sites closer to the Earth-facing side keep Earth in view longer. These match published LOLA illumination studies, and Crescent lets you pick the balance and the dates.</p>
+  <div class="foot"><span>5 / 7</span><span>Earth mask 0°, observer 2 m</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Who it's for</div>
+  <h2>Mission planners, educators, the public</h2>
+  <div class="stats">
+    <div class="stat"><div class="big">🛰️</div><b>Planners</b><p>Rank sites with their own weights. Find dates when a 6.5-day stay gets ≥95% sunlight and the most Earth contact. Export hourly CSV.</p></div>
+    <div class="stat"><div class="big">🏫</div><b>Educators</b><p>The 3D terrain lit by the real Sun and the horizon panorama make low sun angles and libration easy to see in class.</p></div>
+    <div class="stat"><div class="big">🌍</div><b>Everyone</b><p>A free browser link with no install or login, and a plain-language "How it works" page.</p></div>
+  </div>
+  <div class="foot"><span>6 / 7</span><span>Crescent Dev</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Next steps</div>
+  <h2>From hackathon to planning tool</h2>
+  <ul>
+    <li>Add the 5–20 m LOLA products for metre-scale horizons at the final landing sites.</li>
+    <li>Add Artemis lander and relay-satellite visibility (e.g. Lunar Gateway) as a second comms option.</li>
+    <li>Add lunar-night thermal and battery sizing estimates based on shadow duration.</li>
+    <li>Add Kazakh and Russian interfaces for classrooms.</li>
+  </ul>
+  <p style="margin-top:auto">Try it: <a id="live" href="index.html">open Crescent</a></p>
+  <div class="foot"><span>7 / 7</span><span>AI disclosure: code written with help from an AI coding assistant · all numbers computed from NASA data</span></div>
+</section>
+
+</div>
+<div class="nav"><button id="prev">←</button><button id="next">→</button></div>
+<script>
+const S=[...document.querySelectorAll('.slide')];let i=Math.max(0,Math.min(S.length-1,(+location.hash.slice(1)||1)-1));
+const show=()=>{S.forEach((s,k)=>s.classList.toggle('on',k===i));history.replaceState(null,'','#'+(i+1));};
+document.getElementById('prev').onclick=()=>{i=Math.max(0,i-1);show()};document.getElementById('next').onclick=()=>{i=Math.min(S.length-1,i+1);show()};
+addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key)){i=Math.min(S.length-1,i+1);show()}if(['ArrowLeft','PageUp'].includes(e.key)){i=Math.max(0,i-1);show()}});
+document.getElementById('live').href=new URL('index.html',location.href).href;document.getElementById('live').textContent=new URL('./',location.href).href;
+show();
+</script>
+</body>
+</html>
