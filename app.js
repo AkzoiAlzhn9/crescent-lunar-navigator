@@ -505,6 +505,14 @@ async function main() {
   $('#play').addEventListener('click', play); $('#play3').addEventListener('click', play);
   ['#wSun', '#wEarth', '#wNight'].forEach((s) => $(s).addEventListener('input', renderTable));
   $('#csv').addEventListener('click', exportCSV);
+  $('#coordForm').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const la = +$('#inLat').value, lo = ((+$('#inLon').value + 540) % 360) - 180;
+    const [x, y] = llToXY(la, lo);
+    if (!(la <= -80 && la >= -90) || heightAt(x, y) === null) { alert('Enter a latitude between -90 and -80 (south polar region covered by the LOLA model).'); return; }
+    addCustom(la, lo);
+    state.view.cx = x; state.view.cy = y; drawMap();
+  });
   $('#find').addEventListener('click', findWindows);
   document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', async () => {
     document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('active', x === b));

@@ -30,7 +30,9 @@ body{background:radial-gradient(1200px 600px at 80% -10%,#1a1640 0,transparent 6
 .site-info b{color:var(--text);font-family:var(--sans);font-size:15px}
 .controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:10px}
 .controls label,.weights label{display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:12px}
-input[type=date],select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:13px var(--sans);color-scheme:dark}
+.coord-form{margin-top:12px}
+.coord-form input[type=number]{width:150px}
+input[type=date],input[type=number],select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:13px var(--sans);color-scheme:dark}
 .clock{display:flex;gap:10px;align-items:center;margin:4px 0 10px}
 .clock input[type=range]{flex:1}
 input[type=range]{accent-color:var(--accent)}

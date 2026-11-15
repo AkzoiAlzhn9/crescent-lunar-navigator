@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="Code, text and design written with AI assistance (Anthropic Claude); demo voice-over is AI-generated (Google Gemini TTS). All terrain and sky values are computed from NASA LOLA and JPL Horizons data.">
+<meta name="generator" content="AI-assisted (Anthropic Claude, Google Gemini TTS)">
 <title>Crescent — Lunar Landing Site Navigator</title>
 <meta name="description" content="Compare lunar south pole landing sites and dates: Sun and Earth above the real LOLA terrain horizon, power and direct-to-Earth communication windows.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,6 +39,11 @@
       <div class="map-legend"><span class="lg lg-site"></span>candidate site <span class="lg lg-sel"></span>selected <span class="lg lg-sun"></span>Sun direction</div>
     </div>
     <div class="site-info" id="siteInfo"></div>
+    <form class="controls coord-form" id="coordForm">
+      <label>Latitude (°, south = negative) <input type="number" id="inLat" step="0.001" min="-90" max="-80" value="-89.5" required></label>
+      <label>Longitude (°E) <input type="number" id="inLon" step="0.01" min="-180" max="360" value="-45" required></label>
+      <button class="btn" type="submit">Add site by coordinates</button>
+    </form>
   </section>
 
   <section class="panel ctrl-panel">
